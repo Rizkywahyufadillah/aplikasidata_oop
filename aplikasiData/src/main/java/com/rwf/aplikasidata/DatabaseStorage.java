@@ -24,6 +24,7 @@ public class DatabaseStorage implements DataStorage {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
+            createDataTable();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -54,6 +55,12 @@ public class DatabaseStorage implements DataStorage {
         }
         return sb.toString();
 
+    }
+
+    private void createDataTable() throws SQLException {
+        try ( Statement statement = connection.createStatement()) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS data (value TEXT)");
+        }
     }
 
 }
